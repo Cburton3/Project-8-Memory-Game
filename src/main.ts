@@ -1,3 +1,5 @@
+
+
 interface InfoCarta {
   idFoto: number;
   imagen: string;
@@ -68,30 +70,4 @@ const cartaArray: InfoCarta[] = [
   },
 ];
 
-const flipCard = (cartaArray: InfoCarta[]) => {
-  const gridImages = document.querySelectorAll(".grid-images");
-  const imageList = document.querySelectorAll(".card-img");
 
-  if (gridImages && gridImages instanceof NodeList) {
-    gridImages.forEach((gridImage) => {
-      if (gridImage instanceof HTMLDivElement) {
-        gridImage.addEventListener("click", () => {
-          console.log("click");
-          imageList.forEach((image) => {
-            if (
-              image &&
-              image instanceof HTMLImageElement &&
-              image.dataset.indiceId === gridImage.dataset.indiceId
-            ) {
-              let i = image.dataset.indiceId;
-              if (i) {
-                image.src = cartaArray[parseInt(i)].imagen;
-              }
-            }
-          });
-        });
-      }
-    });
-  }
-};
-flipCard(cartaArray);
