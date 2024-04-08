@@ -58,28 +58,42 @@ const crearCartaInicial = (idFoto: number, imagen: string): Carta => ({
 //crearCartaInicial(idFoto, imagen);
 
 const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]): Carta[] => {
-  const coleccionDeCartas: Carta[] = [];
+  const newCards: Carta[] = infoCartas.map((carta) => ({
+    idFoto: carta.idFoto,
+    imagen: carta.imagen,
+    estaVuelta: false,
+    encontrada: false,
+  }));
+  return [...newCards, ...newCards];
+};
 
-  infoCartas.forEach((infoCarta) => {
-    coleccionDeCartas.push({
-      idFoto: infoCarta.idFoto,
-      imagen: infoCarta.imagen,
-      estaVuelta: false,
-      encontrada: false,
-    });
-    coleccionDeCartas.push({
-      idFoto: infoCarta.idFoto,
-      imagen: infoCarta.imagen,
-      estaVuelta: false,
-      encontrada: false,
-    });
-  });
-  return coleccionDeCartas; //red cos only including 2 properties of carta when we need 4 (esta vuelta and encontrada)
+//flat gets rid of nested elements. add num in brackets to increase the depth
 
-  /* Aquí crearemos un array de cartas a partir de un array de infoCartas
+// spead operator here: It's essentially an object with a property pointing to the same carta object, rather than being a duplicate. If hadnt used, would result in the second element of each inner array being an object containing a reference to the original carta object, rather than a duplicate of the carta object. This might lead to unexpected behavior if you modify properties of the carta object later, as it would affect both the original and the referenced objects.
+//conc, if you dont make a copy, it modies the original which fucks up other fucntions.
+
+//const coleccionDeCartas: Carta[] = [];
+
+// infoCartas.forEach((infoCarta) => {
+//   coleccionDeCartas.push({
+//     idFoto: infoCarta.idFoto,
+//     imagen: infoCarta.imagen,
+//     estaVuelta: false,
+//     encontrada: false,
+//   });
+//   coleccionDeCartas.push({
+//     idFoto: infoCarta.idFoto,
+//     imagen: infoCarta.imagen,
+//     estaVuelta: false,
+//     encontrada: false,
+//   });
+// });
+//map mejor tranformar infocarta a carta y luego duplicar spread operator '...' [...arrayTransformado, ...arrayTransformado]
+//red cos only including 2 properties of carta when we need 4 (esta vuelta and encontrada)
+
+/* Aquí crearemos un array de cartas a partir de un array de infoCartas
        y duplicaremos las cartas para que haya dos de cada tipo.
     */
-};
 
 export let cartas: Carta[] = crearColeccionDeCartasInicial(infoCartas);
 
