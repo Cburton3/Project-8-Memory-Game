@@ -6,27 +6,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh; 
- 
+  height: 90vh;
+  flex-direction: column;
 }
 
 .container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 100px);
+  grid-template-rows: repeat(3, 1fr);
   gap: 10px;
-  width: 40%;
-  background-color: lightblue; 
+  background-color: lightblue;
   padding: 1rem;
+  border-radius: 20px;
 }
 
 .container .grid-images {
   background-color: rgb(99, 196, 229);
   border-radius: 10px;
   cursor: pointer;
+  width: 128px;
+  height: 128px;
 }
 
-.card__img {
+.card-img {
   pointer-events: none;
-  width: 100%;
+  border-radius: 10px;
+}
+
+#start {
+  margin-top: 20px;
+  font-size: larger;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  background-color: #B799FF;
+  padding: 10px;
+  font-weight: bolder;
+  border: none;
+}
+#start:hover {
+  transform: scale(1.05);
 }

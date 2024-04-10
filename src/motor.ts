@@ -1,4 +1,4 @@
-import { Carta, Tablero, cartas } from "./modelo";
+import { Carta, Tablero } from "./modelo";
 
 export const barajarCartas = (cartas: Carta[]): Carta[] => {
   const shuffledArray: Carta[] = cartas.slice();
@@ -109,7 +109,7 @@ export const esPartidaCompleta = (tablero: Tablero): boolean => {
 
 export const iniciaPartida = (tablero: Tablero): void => {
   const cartasBarajadas = barajarCartas(tablero.cartas);
-  tablero.cartas = [...cartasBarajadas];
+  tablero.cartas = [...cartasBarajadas]; //this assigns the array of cartasBarajadas as a copy. without ... i'm assigning the var and not the array itself so any changes to tablero.cartas will also affect cartasBarajadas. By making a copy, they dont. As I use and make changes to tablero.cartas, it would change cartasBarajadas
   tablero.estadoPartida = "CeroCartasLevantadas";
 };
 

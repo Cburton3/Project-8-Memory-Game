@@ -1,5 +1,5 @@
 import { sePuedeVoltearLaCarta, sonPareja, parejaEncontrada, parejaNoEncontrada, iniciaPartida, voltearLaCarta} from "./motor";
-import { Carta, Tablero, cartas, tablero } from "./modelo";
+import { Tablero, tablero } from "./modelo";
 
 //boton para empezar partida que baraja cartas y crear el tablero inicial
 
@@ -38,18 +38,19 @@ const handleDivCarta = (elementoImg: HTMLImageElement, tablero: Tablero, indiceC
     const urlImg = tablero.cartas[indiceCarta].imagen;
     voltearLaCarta(tablero, indiceCarta);
     mostrarImagenAnimal(elementoImg, urlImg);
-    esPareja(tablero, indiceA, indice);
-    //fx that son pareja o no por los indices esta vuelta true, estado partida goes to 0cartas levantadas si no son pareja, esta vuelta/encontrada == false y estado partida = 0 cartas levantadas
+    esPareja(tablero);
     console.log(tablero.cartas)
   } else {
     console.log('No se puede voltear la carta')
   }
 };
 
-const esPareja = (tablero: Tablero, indiceA: number, indiceB: number) => {
-if (sonPareja(indiceA, indiceB, tablero) === true) {
+const esPareja = (tablero: Tablero) => {
+  const indiceA = tablero.indiceCartaVolteadaA
+  const indiceB = tablero.indiceCartaVolteadaB
+if (indiceA && indiceB && sonPareja(indiceA, indiceB, tablero) === true) {
   parejaEncontrada(tablero, indiceA, indiceB)
-} else {
+} else if (indiceA && indiceB) {
   parejaNoEncontrada(tablero, indiceA, indiceB)
 }
 };
@@ -61,12 +62,15 @@ const mostrarImagenAnimal = (elementoImg: HTMLImageElement, urlImg: string) => {
   elementoImg.style.transition = "all 0.5s linear";
 };
 
-
-
 const clickButtonEmpezarPartida = () => {
   iniciaPartida(tablero);
 };
 
+//things left to do:
+
+//make sure the shuffle actually works cos first 6 clicks work then nothing
+//only one image is displayed per card
+//cards need to be turned back over if second has got same indice
 
 
 // const cartasBocaAbajo = () => {
@@ -158,3 +162,5 @@ const clickButtonEmpezarPartida = () => {
 //   }, 1000);
 // }
 // }
+
+
