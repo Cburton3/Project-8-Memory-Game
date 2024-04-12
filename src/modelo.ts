@@ -49,7 +49,7 @@ export const infoCartas: InfoCarta[] = [
   },
 ];
 
-const crearCartaInicial = (idFoto: number, imagen: string): Carta => ({
+export const crearCartaInicial = (idFoto: number, imagen: string): Carta => ({
   idFoto,
   imagen,
   estaVuelta: false,
@@ -96,6 +96,7 @@ const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]): Carta[] => {
     */
 
 export let cartas: Carta[] = crearColeccionDeCartasInicial(infoCartas);
+console.log(cartas)
 
 /*
     Aquí definimos el tipo de estado de la partida, la idea es que cuando empiece la partida todas las cartas estén boca abajo y si se hacen click sobre ellas no se volteen.
@@ -112,7 +113,7 @@ type EstadoPartida =
 export interface Tablero {
   cartas: Carta[];
   estadoPartida: EstadoPartida;
-  indiceCartaVolteadaA?: number;
+  indiceCartaVolteadaA?: number;//question mark means that objects of type Tablero may or may not have these properties defined
   indiceCartaVolteadaB?: number;
 }
 

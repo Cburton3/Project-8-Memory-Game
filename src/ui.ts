@@ -1,64 +1,82 @@
-import { sePuedeVoltearLaCarta, sonPareja, parejaEncontrada, parejaNoEncontrada, iniciaPartida, voltearLaCarta} from "./motor";
+import {
+  sePuedeVoltearLaCarta,
+  sonPareja,
+  parejaEncontrada,
+  parejaNoEncontrada,
+  iniciaPartida,
+  voltearLaCarta,
+} from "./motor";
+
 import { Tablero, tablero } from "./modelo";
 
 //boton para empezar partida que baraja cartas y crear el tablero inicial
 
-
 export const agregarEventoInicioPartida = () => {
   const startButton = document.getElementById("start");
-  if (
-    startButton &&
-    startButton instanceof HTMLButtonElement
-  ) {
+  if (startButton && startButton instanceof HTMLButtonElement) {
     startButton.addEventListener("click", () => {
-    clickButtonEmpezarPartida();
+      clickButtonEmpezarPartida();
     });
   }
 };
 
 export const crearTablero = () => {
-  for(let i = 0; i < tablero.cartas.length; i++ ) {
-    mapearDivsCartas(i, tablero)
+  for (let i = 0; i < tablero.cartas.length; i++) {
+    mapearDivsCartas(i, tablero);
   }
-}
+};
 
-const mapearDivsCartas = (indice : number, tablero : Tablero) => {
-  const dataIndiceId = `[data-indice-id="${indice}"]`;//nombre del propriedad
+const mapearDivsCartas = (indice: number, tablero: Tablero) => {
+  const dataIndiceId = `[data-indice-id="${indice}"]`; //nombre del propriedad
   const elementoDiv = document.querySelector(`div${dataIndiceId}`); // ref elemento del div
-  const elementoImg = document.querySelector(`img${dataIndiceId}`);// ref imagen
-  if(elementoDiv && elementoDiv instanceof HTMLDivElement && elementoImg && elementoImg instanceof HTMLImageElement) {
-    elementoDiv.addEventListener('click', () => {
-      handleDivCarta(elementoImg, tablero, indice)
-    })
+  const elementoImg = document.querySelector(`img${dataIndiceId}`); // ref imagen
+  if (
+    elementoDiv &&
+    elementoDiv instanceof HTMLDivElement &&
+    elementoImg &&
+    elementoImg instanceof HTMLImageElement
+  ) {
+    elementoDiv.addEventListener("click", () => {
+      handleDivCarta(elementoImg, tablero, indice);
+    });
   }
-}
+};
 
-const handleDivCarta = (elementoImg: HTMLImageElement, tablero: Tablero, indiceCarta: number) => {
-  if(sePuedeVoltearLaCarta(tablero, indiceCarta)) {
+const handleDivCarta = (
+  elementoImg: HTMLImageElement,
+  tablero: Tablero,
+  indiceCarta: number
+) => {
+  if (sePuedeVoltearLaCarta(tablero, indiceCarta)) {
     const urlImg = tablero.cartas[indiceCarta].imagen;
-    voltearLaCarta(tablero, indiceCarta);
-    mostrarImagenAnimal(elementoImg, urlImg);
+    console.log(urlImg);
+    voltearLaCarta(tablero, indiceCarta);//good
+    mostrarImagenAnimal(elementoImg, urlImg);//good
     esPareja(tablero);
-    console.log(tablero.cartas)
+    console.log(tablero.cartas);
   } else {
-    console.log('No se puede voltear la carta')
+    console.log("No se puede voltear la carta");
   }
 };
 
 const esPareja = (tablero: Tablero) => {
-  const indiceA = tablero.indiceCartaVolteadaA
-  const indiceB = tablero.indiceCartaVolteadaB
-if (indiceA && indiceB && sonPareja(indiceA, indiceB, tablero) === true) {
-  parejaEncontrada(tablero, indiceA, indiceB)
-} else if (indiceA && indiceB) {
-  parejaNoEncontrada(tablero, indiceA, indiceB)
-}
+  const indiceA = tablero.indiceCartaVolteadaA;
+  const indiceB = tablero.indiceCartaVolteadaB;
+
+  if (indiceA && indiceB) {
+    if (sonPareja(indiceA, indiceB, tablero)) {
+      parejaEncontrada(tablero, indiceA, indiceB);
+    } else {
+      parejaNoEncontrada(tablero, indiceA, indiceB);
+      resetearCartas(tablero);
+    }
+  }
 };
 
 const mostrarImagenAnimal = (elementoImg: HTMLImageElement, urlImg: string) => {
-  elementoImg.src = urlImg
+  elementoImg.src = urlImg;
   elementoImg.style.backgroundColor = "#B799FF";
-  elementoImg.style.transform = "rotateY(180deg)";//le da la vuelta
+  elementoImg.style.transform = "rotateY(180deg)"; //le da la vuelta
   elementoImg.style.transition = "all 0.5s linear";
 };
 
@@ -66,12 +84,41 @@ const clickButtonEmpezarPartida = () => {
   iniciaPartida(tablero);
 };
 
+const resetearCartas = (
+  tablero: Tablero
+  // indiceA: number,
+  // indiceB: number
+): void => {
+  // const cartaA = tablero.cartas[indiceA];
+  // const cartaB = tablero.cartas[indiceB];
+  // if(cartaA.estaVuelta === true && cartaB.estaVuelta === true && !cartaB.encontrada) {
+  //   cartaA.imagen = '';
+  //   cartaB.imagen = '';
+  // }
+  for (let indice = 0; indice < tablero.cartas.length; indice++) {
+    if (
+      tablero.cartas[indice].estaVuelta &&
+      !tablero.cartas[indice].encontrada
+    ) {
+      const dataIndiceId = `[data-indice-id="${indice}"]`; //nombre del propriedad
+      const elementoImg = document.querySelector(`img${dataIndiceId}`); // ref imagen. this is just how to select the data set from inside the html tag
+      if (elementoImg && elementoImg instanceof HTMLImageElement) {
+        elementoImg.src = "";
+      }
+    }
+  }
+}; //un bucle mejor
+
+//encontrada es que se ha encontrado la pareja
+
+//Issue is the cards are created as an obj but the function that assigns the src to the html for the second set isnt working
+
 //things left to do:
 
-//make sure the shuffle actually works cos first 6 clicks work then nothing
-//only one image is displayed per card
+//make sure the shuffle actually works cos first 6 clicks work then nothing. no alli por defecto, its just the first 6
 //cards need to be turned back over if second has got same indice
-
+//when 2 cards have been flipped, and no pareja, flip back
+//when click empezar partida, all cards ned to flip back
 
 // const cartasBocaAbajo = () => {
 //   const imageList = document.querySelectorAll(".card-img");
@@ -79,7 +126,7 @@ const clickButtonEmpezarPartida = () => {
 //     imageList.forEach((image) => {
 //       if (image && image instanceof HTMLImageElement) {
 //         image.src = /*url de un imagen boca abajo*/;
-        
+
 //       }
 //     });
 //   }
@@ -162,5 +209,3 @@ const clickButtonEmpezarPartida = () => {
 //   }, 1000);
 // }
 // }
-
-

@@ -1,23 +1,41 @@
 import { Carta, Tablero } from "./modelo";
 
-export const barajarCartas = (cartas: Carta[]): Carta[] => {
-  const shuffledArray: Carta[] = cartas.slice();
-
-  // Start from the end of the array
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
-    //what this work in positive?
-    // Generate a random index between 0 and i (inclusive)
-    const randomIndex: number = Math.floor(Math.random() * (i + 1));
-
-    // Swap elements between current index and random index
-    [shuffledArray[i], shuffledArray[randomIndex]] = [
-      shuffledArray[randomIndex],
-      shuffledArray[i],
+const generarNumeroAleatorio = (indiceDelArray: number) =>
+  Math.floor(Math.random() * (indiceDelArray + 1));
+const barajarCartas = (cartas: Carta[]): Carta[] => {
+  const copiaCartas = [...cartas];
+  for (let indice = copiaCartas.length - 1; indice > 0; indice--) {
+    let indiceAleatorio = generarNumeroAleatorio(indice);
+    [{ ...copiaCartas[indice] }, { ...copiaCartas[indiceAleatorio] }] = [
+      copiaCartas[indiceAleatorio],
+      copiaCartas[indice],
     ];
   }
-
-  return shuffledArray;
+  return copiaCartas;
 };
+
+
+
+
+
+// export const barajarCartas = (cartas: Carta[]): Carta[] => {//doesnt work cos the indice for 2 cards is the same 
+//   const shuffledArray: Carta[] = cartas.slice();
+
+//   // Start from the end of the array
+//   for (let i = shuffledArray.length - 1; i > 0; i--) {
+//     //what this work in positive?
+//     // Generate a random index between 0 and i (inclusive)
+//     const randomIndex: number = Math.floor(Math.random() * (i + 1));
+
+//     // Swap elements between current index and random index
+//     [shuffledArray[i], shuffledArray[randomIndex]] = [
+//       shuffledArray[randomIndex],
+//       shuffledArray[i],
+//     ];
+//   }
+
+//   return shuffledArray;
+// };
 
 /*
     Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
@@ -27,8 +45,8 @@ export const sePuedeVoltearLaCarta = (
   indice: number
 ): boolean => {
   const carta = tablero.cartas[indice];
-  return !carta.estaVuelta && !carta.encontrada //returns true/false   
-};
+  return !carta.estaVuelta && !carta.encontrada; //returns true/false
+}; //doesnt work cos the indice was already used?
 
 /*
     Dos cartas son pareja si en el array de tablero de cada una tienen el mismo id
@@ -58,7 +76,8 @@ export const parejaEncontrada = (
   tablero: Tablero,
   indiceA: number,
   indiceB: number
-): void => { //this void means it dont return no value
+): void => {
+  //this void means it dont return no value
   const cartaA = tablero.cartas[indiceA];
   const cartaB = tablero.cartas[indiceB];
 
@@ -72,7 +91,7 @@ export const parejaEncontrada = (
 /*
     Aquí asumimos que no son pareja y las volvemos a poner boca abajo
   */
-export const parejaNoEncontrada = (
+export const parejaNoEncontrada = (//this function is wrong as the cards are flipped
   tablero: Tablero,
   indiceA: number,
   indiceB: number
@@ -95,7 +114,7 @@ export const esPartidaCompleta = (tablero: Tablero): boolean => {
     tablero.cartas.every((carta) => {
       carta.estaVuelta === true;
       carta.encontrada === true;
-    }) 
+    })
   ) {
     return true;
   } else {
@@ -115,13 +134,13 @@ export const iniciaPartida = (tablero: Tablero): void => {
 
 export const voltearLaCarta = (tablero: Tablero, indice: number) => {
   tablero.cartas[indice].estaVuelta = true;
-  if(tablero.estadoPartida === "CeroCartasLevantadas") {
+  if (tablero.estadoPartida === "CeroCartasLevantadas") {
     tablero.indiceCartaVolteadaA = indice;
     tablero.estadoPartida = "UnaCartaLevantada";
   } else if (tablero.estadoPartida === "UnaCartaLevantada") {
-    tablero.indiceCartaVolteadaA = indice;
+    tablero.indiceCartaVolteadaB = indice;
     tablero.estadoPartida = "DosCartasLevantadas";
-  }  
+  }
 };
 
 //here i put a fx with 'cartas' butneed to use tablero as 'cartas is part of tablero as cant access cartas WITHOUT tablero...only exists there
