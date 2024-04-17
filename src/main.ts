@@ -1,8 +1,8 @@
-import { agregarEventoInicioPartida, crearTablero } from "./ui";
+import {crearTablero, prepGame } from "./ui";
 
 document.addEventListener('DOMContentLoaded', () => {
   crearTablero();
-  agregarEventoInicioPartida();
+  prepGame();
 })
 
 
