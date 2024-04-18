@@ -7,6 +7,7 @@ import {
   turnCardOver,
   pairFound,
   pairNotFound,
+  isGameComplete,
 } from "./motor";
 
 export const prepGame = (): void => {
@@ -51,6 +52,7 @@ const showCardFx = (
     turnCardOver(tablero, indice);
     showImg(imgElement, imgUrl);
     checkIndices(tablero);
+
     console.log(tablero.cartas);
   } else {
     console.log("No se puede voltear la carta");
@@ -71,6 +73,8 @@ const checkIndices = (tablero: Tablero): void => {
     //here we dont use null as null is a value, value: null. undefined is that there is no value. here we are happy with null as a value
     if (checkIfPair(tablero, indiceA, indiceB)) {
       pairFound(tablero, indiceA, indiceB);
+      console.log("hello");
+      gameComplete(tablero);
     } else {
       pairNotFound(tablero, indiceA, indiceB);
       resetCards(tablero);
@@ -78,7 +82,7 @@ const checkIndices = (tablero: Tablero): void => {
   }
 };
 
-const resetCards = (tablero: Tablero) => {
+const resetCards = (tablero: Tablero): void => {
   setTimeout(() => {
     for (let indice = 0; indice < tablero.cartas.length; indice++) {
       if (
@@ -93,4 +97,18 @@ const resetCards = (tablero: Tablero) => {
       }
     }
   }, 1000);
+};
+
+const gameComplete = (tablero: Tablero) => {
+  console.log(isGameComplete(tablero));
+  if (isGameComplete(tablero)) {
+    const newDiv = document.createElement("p");
+    newDiv.textContent = "You have successfully completed the game";
+    if (newDiv instanceof HTMLParagraphElement) {
+      const parentElement = document.getElementById("endGame");
+      if (parentElement && parentElement instanceof HTMLDivElement) {
+        parentElement.appendChild(newDiv);
+      }
+    }
+  }
 };

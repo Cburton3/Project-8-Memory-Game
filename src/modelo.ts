@@ -70,12 +70,7 @@ export interface Tablero {
   indiceCartaVolteadaB?: number;
 }
 
-const crearTableroInicial = (): Tablero => ({
-  cartas: cartas,
-  estadoPartida: "PartidaNoIniciada",
-});
 
-export let tablero: Tablero = crearTableroInicial();
 
 const duplicarCartas = (infoCartas: InfoCarta[]): Carta[] => {
   const nuevasCartas: Carta[] = infoCartas.map((carta) => ({
@@ -88,4 +83,10 @@ const duplicarCartas = (infoCartas: InfoCarta[]): Carta[] => {
 };
 
 export let cartas: Carta[] = duplicarCartas(infoCartas);
-console.log(cartas)
+
+const crearTableroInicial = (): Tablero => ({
+  cartas: cartas,
+  estadoPartida: "PartidaNoIniciada",
+});
+
+export let tablero: Tablero = crearTableroInicial();

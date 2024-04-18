@@ -1,11 +1,6 @@
-import {crearTablero, prepGame } from "./ui";
+import { crearTablero, prepGame } from "./ui";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   crearTablero();
   prepGame();
-})
-
-
-
-
-
+});

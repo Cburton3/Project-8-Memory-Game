@@ -29,18 +29,23 @@ export const canTurnCardOver = (tablero: Tablero, indice: number): boolean => {
     return false;
   }
 };
-console.log(canTurnCardOver);
 
 export const turnCardOver = (tablero: Tablero, indice: number): void => {
   tablero.cartas[indice].estaVuelta = true;
-  if ((tablero.estadoPartida = "CeroCartasLevantadas")) {
-    tablero.indiceCartaVolteadaA = indice;
-    tablero.estadoPartida = "UnaCartaLevantada";
-  } else if ((tablero.estadoPartida = "UnaCartaLevantada")) {
-    tablero.indiceCartaVolteadaB = indice;
+  if (tablero.estadoPartida === "CeroCartasLevantadas") {
+    //are these exactly the same so use === in if statements
+    tablero.indiceCartaVolteadaA = indice; //assigns value
+    tablero.estadoPartida = "UnaCartaLevantada"; //assigns value
+  } else if (tablero.estadoPartida === "UnaCartaLevantada") {
+    tablero.indiceCartaVolteadaB = indice; 
+    //tablero.indiceCartaVolteadaB === indice; //this asks if they are the same but doesnt assign the value
     tablero.estadoPartida = "DosCartasLevantadas";
   }
 };
+
+//=== are these the exact same (compares) so 3===3 but 3 is not === '3' this asks if they are the same
+//= assigns a value so let x = 5 this gives a value 
+//if dont understand (like me) then just use the === in if statements
 
 export const checkIfPair = (
   tablero: Tablero,
@@ -85,20 +90,21 @@ export const pairNotFound = (
   cartaB.estaVuelta = false;
   tablero.estadoPartida = "CeroCartasLevantadas";
   tablero.indiceCartaVolteadaA = undefined;
-  tablero.indiceCartaVolteadaA = undefined;
+  tablero.indiceCartaVolteadaB = undefined;
 };
 
 //espartida complete fx needs doing and put somewhere
 
-// export const esPartidaCompleta = (tablero: Tablero): boolean => {
-//   if (
-//     tablero.cartas.every((carta) => {
-//       carta.estaVuelta === true;
-//       carta.encontrada === true;
-//     })
-//   ) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
+export const isGameComplete = (tablero: Tablero): boolean => {
+  if (
+    tablero.cartas.every((carta) => {
+      carta.estaVuelta === true;
+      carta.encontrada === true;
+    })
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
