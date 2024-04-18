@@ -39,9 +39,6 @@ const mapIndices = (tablero: Tablero, indice: number): void => {
   }
 };
 
-//re HTML attributes are always considered as strings, even if they contain digits hence ""
-//[]used to denote attribute selectors. as 'data' is an attribe just like src or class, need []
-
 const showCardFx = (
   tablero: Tablero,
   indice: number,
@@ -62,7 +59,7 @@ const showCardFx = (
 const showImg = (imgElement: HTMLImageElement, imgUrl: string) => {
   imgElement.src = imgUrl;
   imgElement.style.backgroundColor = "#B799FF";
-  imgElement.style.transform = "rotateY(180deg)"; //le da la vuelta
+  imgElement.style.transform = "rotateY(180deg)";
   imgElement.style.transition = "all 0.5s linear";
 };
 
@@ -70,7 +67,6 @@ const checkIndices = (tablero: Tablero): void => {
   const indiceA = tablero.indiceCartaVolteadaA;
   const indiceB = tablero.indiceCartaVolteadaB;
   if (indiceA !== undefined && indiceB !== undefined) {
-    //here we dont use null as null is a value, value: null. undefined is that there is no value. here we are happy with null as a value
     if (checkIfPair(tablero, indiceA, indiceB)) {
       pairFound(tablero, indiceA, indiceB);
       console.log("hello");
@@ -100,15 +96,16 @@ const resetCards = (tablero: Tablero): void => {
 };
 
 const gameComplete = (tablero: Tablero) => {
-  console.log(isGameComplete(tablero));
   if (isGameComplete(tablero)) {
+    const parentElement = document.getElementById("endGame");
     const newDiv = document.createElement("p");
     newDiv.textContent = "You have successfully completed the game";
-    if (newDiv instanceof HTMLParagraphElement) {
-      const parentElement = document.getElementById("endGame");
-      if (parentElement && parentElement instanceof HTMLDivElement) {
-        parentElement.appendChild(newDiv);
-      }
+    if (
+      newDiv instanceof HTMLParagraphElement &&
+      parentElement &&
+      parentElement instanceof HTMLDivElement
+    ) {
+      parentElement.appendChild(newDiv);
     }
   }
 };

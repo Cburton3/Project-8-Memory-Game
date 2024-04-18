@@ -48,7 +48,6 @@ export const infoCartas: InfoCarta[] = [
   },
 ];
 
-//this creates one card
 export const crearCartaInicial = (idFoto: number, imagen: string): Carta => ({
   idFoto,
   imagen,

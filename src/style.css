@@ -47,3 +47,9 @@
 #start:hover {
   transform: scale(1.05);
 }
+
+#endGame {
+  font-weight: bolder;
+  font-size: larger;
+  color: rgb(99, 196, 229);
+}

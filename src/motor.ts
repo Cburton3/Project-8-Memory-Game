@@ -17,7 +17,7 @@ const barajarCartas = (cartas: Carta[]): Carta[] => {
 
 export const startGame = (tablero: Tablero): void => {
   const cartasBarajadas = barajarCartas(tablero.cartas);
-  tablero.cartas = [...cartasBarajadas]; //newly shuffled cards now set to 'cartas'
+  tablero.cartas = [...cartasBarajadas]; 
   tablero.estadoPartida = "CeroCartasLevantadas";
 };
 
@@ -33,19 +33,14 @@ export const canTurnCardOver = (tablero: Tablero, indice: number): boolean => {
 export const turnCardOver = (tablero: Tablero, indice: number): void => {
   tablero.cartas[indice].estaVuelta = true;
   if (tablero.estadoPartida === "CeroCartasLevantadas") {
-    //are these exactly the same so use === in if statements
-    tablero.indiceCartaVolteadaA = indice; //assigns value
-    tablero.estadoPartida = "UnaCartaLevantada"; //assigns value
+    tablero.indiceCartaVolteadaA = indice; 
+    tablero.estadoPartida = "UnaCartaLevantada";
   } else if (tablero.estadoPartida === "UnaCartaLevantada") {
-    tablero.indiceCartaVolteadaB = indice; 
-    //tablero.indiceCartaVolteadaB === indice; //this asks if they are the same but doesnt assign the value
+    tablero.indiceCartaVolteadaB = indice;
     tablero.estadoPartida = "DosCartasLevantadas";
   }
 };
 
-//=== are these the exact same (compares) so 3===3 but 3 is not === '3' this asks if they are the same
-//= assigns a value so let x = 5 this gives a value 
-//if dont understand (like me) then just use the === in if statements
 
 export const checkIfPair = (
   tablero: Tablero,
@@ -93,13 +88,10 @@ export const pairNotFound = (
   tablero.indiceCartaVolteadaB = undefined;
 };
 
-//espartida complete fx needs doing and put somewhere
-
 export const isGameComplete = (tablero: Tablero): boolean => {
   if (
     tablero.cartas.every((carta) => {
-      carta.estaVuelta === true;
-      carta.encontrada === true;
+      return carta.estaVuelta === true && carta.encontrada === true;
     })
   ) {
     return true;
@@ -107,4 +99,3 @@ export const isGameComplete = (tablero: Tablero): boolean => {
     return false;
   }
 };
-
