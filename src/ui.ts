@@ -31,7 +31,7 @@ const mapIndices = (tablero: Tablero, indice: number): void => {
     divElement &&
     divElement instanceof HTMLDivElement &&
     imgElement &&
-    imgElement instanceof HTMLImageElement
+    imgElement instanceof HTMLImageElement 
   ) {
     divElement.addEventListener("click", () => {
       showCardFx(tablero, indice, imgElement);

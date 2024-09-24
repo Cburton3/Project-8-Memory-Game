@@ -19,11 +19,13 @@ export const startGame = (tablero: Tablero): void => {
   const cartasBarajadas = barajarCartas(tablero.cartas);
   tablero.cartas = [...cartasBarajadas]; 
   tablero.estadoPartida = "CeroCartasLevantadas";
+  console.log('startGame clicked')
 };
 
 export const canTurnCardOver = (tablero: Tablero, indice: number): boolean => {
   const carta = tablero.cartas[indice];
-  if (!carta.encontrada && !carta.estaVuelta) {
+  if (!carta.encontrada && !carta.estaVuelta &&
+    tablero.estadoPartida !== "PartidaNoIniciada" ) {
     return true;
   } else {
     return false;
@@ -35,6 +37,7 @@ export const turnCardOver = (tablero: Tablero, indice: number): void => {
   if (tablero.estadoPartida === "CeroCartasLevantadas") {
     tablero.indiceCartaVolteadaA = indice; 
     tablero.estadoPartida = "UnaCartaLevantada";
+    //here cannot click on the pics
   } else if (tablero.estadoPartida === "UnaCartaLevantada") {
     tablero.indiceCartaVolteadaB = indice;
     tablero.estadoPartida = "DosCartasLevantadas";
