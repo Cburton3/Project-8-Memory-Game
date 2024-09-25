@@ -39,7 +39,7 @@
   border-radius: 10px;
   cursor: pointer;
   color: white;
-  background-color: #B799FF;
+  background-color: #b799ff;
   padding: 10px;
   font-weight: bolder;
   border: none;
@@ -48,7 +48,7 @@
   transform: scale(1.05);
 }
 
-#endGame {
+#message {
   font-weight: bolder;
   font-size: larger;
   color: rgb(99, 196, 229);

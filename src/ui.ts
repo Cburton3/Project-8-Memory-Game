@@ -1,5 +1,4 @@
-import { Tablero, tablero } from "./modelo";
-
+import { Board, tablero } from "./modelo";
 import {
   startGame,
   canTurnCardOver,
@@ -10,20 +9,24 @@ import {
   isGameComplete,
 } from "./motor";
 
-export const prepGame = (): void => {
-  const startButton = document.getElementById("start");
-  if (startButton && startButton instanceof HTMLButtonElement) {
-    startButton.addEventListener("click", () => startGame(tablero));
-  }
-};
-
-export const crearTablero = () => {
-  for (let indice = 0; indice < tablero.cartas.length; indice++) {
+export const createBoard = () => {
+  startGameMessage(tablero);
+  for (let indice = 0; indice < tablero.cards.length; indice++) {
     mapIndices(tablero, indice);
   }
 };
 
-const mapIndices = (tablero: Tablero, indice: number): void => {
+export const prepGame = (): void => {
+  const startButton = document.getElementById("start");
+  if (startButton && startButton instanceof HTMLButtonElement) {
+    startButton.addEventListener("click", () => {
+      startGame(tablero);
+      startGameMessage(tablero);
+    });
+  }
+};
+
+const mapIndices = (tablero: Board, indice: number): void => {
   const divIndice = `[data-indice-id="${indice}"]`;
   const divElement = document.querySelector(`div${divIndice}`);
   const imgElement = document.querySelector(`img${divIndice}`);
@@ -31,7 +34,7 @@ const mapIndices = (tablero: Tablero, indice: number): void => {
     divElement &&
     divElement instanceof HTMLDivElement &&
     imgElement &&
-    imgElement instanceof HTMLImageElement 
+    imgElement instanceof HTMLImageElement
   ) {
     divElement.addEventListener("click", () => {
       showCardFx(tablero, indice, imgElement);
@@ -40,19 +43,19 @@ const mapIndices = (tablero: Tablero, indice: number): void => {
 };
 
 const showCardFx = (
-  tablero: Tablero,
+  tablero: Board,
   indice: number,
   imgElement: HTMLImageElement
 ): void => {
   if (canTurnCardOver(tablero, indice)) {
-    const imgUrl = tablero.cartas[indice].imagen;
+    const imgUrl = tablero.cards[indice].image;
     turnCardOver(tablero, indice);
     showImg(imgElement, imgUrl);
     checkIndices(tablero);
 
-    console.log(tablero.cartas);
+    console.log(tablero.cards);
   } else {
-    console.log("No se puede voltear la carta");
+    console.log("Card cannot be turned over");
   }
 };
 
@@ -63,9 +66,9 @@ const showImg = (imgElement: HTMLImageElement, imgUrl: string) => {
   imgElement.style.transition = "all 0.5s linear";
 };
 
-const checkIndices = (tablero: Tablero): void => {
-  const indiceA = tablero.indiceCartaVolteadaA;
-  const indiceB = tablero.indiceCartaVolteadaB;
+const checkIndices = (tablero: Board): void => {
+  const indiceA = tablero.flippedCardAIndex;
+  const indiceB = tablero.flippedCardBIndex;
   if (indiceA !== undefined && indiceB !== undefined) {
     if (checkIfPair(tablero, indiceA, indiceB)) {
       pairFound(tablero, indiceA, indiceB);
@@ -78,13 +81,10 @@ const checkIndices = (tablero: Tablero): void => {
   }
 };
 
-const resetCards = (tablero: Tablero): void => {
+const resetCards = (tablero: Board): void => {
   setTimeout(() => {
-    for (let indice = 0; indice < tablero.cartas.length; indice++) {
-      if (
-        !tablero.cartas[indice].encontrada &&
-        !tablero.cartas[indice].estaVuelta
-      ) {
+    for (let indice = 0; indice < tablero.cards.length; indice++) {
+      if (!tablero.cards[indice].found && !tablero.cards[indice].flipped) {
         const divIndice = `[data-indice-id="${indice}"]`;
         const imgElement = document.querySelector(`img${divIndice}`);
         if (imgElement && imgElement instanceof HTMLImageElement) {
@@ -92,12 +92,12 @@ const resetCards = (tablero: Tablero): void => {
         }
       }
     }
-  }, 1000);
+  }, 750);
 };
 
-const gameComplete = (tablero: Tablero) => {
+const gameComplete = (tablero: Board) => {
   if (isGameComplete(tablero)) {
-    const parentElement = document.getElementById("endGame");
+    const parentElement = document.getElementById("message");
     const newDiv = document.createElement("p");
     newDiv.textContent = "You have successfully completed the game";
     if (
@@ -106,6 +106,29 @@ const gameComplete = (tablero: Tablero) => {
       parentElement instanceof HTMLDivElement
     ) {
       parentElement.appendChild(newDiv);
+    }
+  }
+};
+
+const startGameMessage = (tablero: Board) => {
+  const parentElement = document.getElementById("message");
+  const newDiv = document.createElement("p");
+
+  if (tablero.gameStatus === "gameNotStarted") {
+    newDiv.textContent = "Please press Start Game button to begin";
+    newDiv.classList.add("newDiv");
+    if (
+      newDiv &&
+      newDiv instanceof HTMLParagraphElement &&
+      parentElement &&
+      parentElement instanceof HTMLDivElement
+    ) {
+      parentElement.appendChild(newDiv);
+    }
+  } else if (tablero.gameStatus === "zeroCardsFlipped") {
+    const div = document.querySelector(".newDiv");
+    if (div && div instanceof HTMLParagraphElement) {
+      div.style.display = "none";
     }
   }
 };

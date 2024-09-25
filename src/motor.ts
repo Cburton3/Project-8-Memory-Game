@@ -1,58 +1,57 @@
-import { Carta, Tablero } from "./modelo";
+import { Card, Board } from "./modelo";
 
-const generarNumeroAleatorio = (indiceDelArray: number) =>
-  Math.floor(Math.random() * (indiceDelArray + 1));
+const generateRandomNumber = (arrayIndex: number) =>
+  Math.floor(Math.random() * (arrayIndex + 1));
 
-const barajarCartas = (cartas: Carta[]): Carta[] => {
-  const copiaCartas = [...cartas];
-  for (let indice = copiaCartas.length - 1; indice > 0; indice--) {
-    let indiceAleatorio = generarNumeroAleatorio(indice);
-    [{ ...copiaCartas[indice] }, { ...copiaCartas[indiceAleatorio] }] = [
-      copiaCartas[indiceAleatorio],
-      copiaCartas[indice],
+const shuffleCards = (cards: Card[]): Card[] => {
+  const cardsCopy = [...cards];
+  for (let index = cardsCopy.length - 1; index > 0; index--) {
+    let randomIndex = generateRandomNumber(index);
+    [{ ...cardsCopy[index] }, { ...cardsCopy[randomIndex] }] = [
+      cardsCopy[randomIndex],
+      cardsCopy[index],
     ];
   }
-  return copiaCartas;
+  return cardsCopy;
 };
 
-export const startGame = (tablero: Tablero): void => {
-  const cartasBarajadas = barajarCartas(tablero.cartas);
-  tablero.cartas = [...cartasBarajadas]; 
-  tablero.estadoPartida = "CeroCartasLevantadas";
-  console.log('startGame clicked')
+export const startGame = (tablero: Board): void => {
+  if (tablero.gameStatus === "gameNotStarted") {
+    const shuffledCards = shuffleCards(tablero.cards);
+    tablero.cards = [...shuffledCards];
+    tablero.gameStatus = "zeroCardsFlipped";
+    console.log("startGame clicked");
+  }
 };
 
-export const canTurnCardOver = (tablero: Tablero, indice: number): boolean => {
-  const carta = tablero.cartas[indice];
-  if (!carta.encontrada && !carta.estaVuelta &&
-    tablero.estadoPartida !== "PartidaNoIniciada" ) {
+export const canTurnCardOver = (tablero: Board, index: number): boolean => {
+  const card = tablero.cards[index];
+  if (!card.found && !card.flipped && tablero.gameStatus !== "gameNotStarted") {
     return true;
   } else {
     return false;
   }
 };
 
-export const turnCardOver = (tablero: Tablero, indice: number): void => {
-  tablero.cartas[indice].estaVuelta = true;
-  if (tablero.estadoPartida === "CeroCartasLevantadas") {
-    tablero.indiceCartaVolteadaA = indice; 
-    tablero.estadoPartida = "UnaCartaLevantada";
-    //here cannot click on the pics
-  } else if (tablero.estadoPartida === "UnaCartaLevantada") {
-    tablero.indiceCartaVolteadaB = indice;
-    tablero.estadoPartida = "DosCartasLevantadas";
+export const turnCardOver = (tablero: Board, indice: number): void => {
+  tablero.cards[indice].flipped = true;
+  if (tablero.gameStatus === "zeroCardsFlipped") {
+    tablero.flippedCardAIndex = indice;
+    tablero.gameStatus = "oneCardFlipped";
+  } else if (tablero.gameStatus === "oneCardFlipped") {
+    tablero.flippedCardBIndex = indice;
+    tablero.gameStatus = "twoCardsFlipped";
   }
 };
 
-
 export const checkIfPair = (
-  tablero: Tablero,
+  tablero: Board,
   indiceA: number,
   indiceB: number
 ): boolean => {
-  const cartaA = tablero.cartas[indiceA];
-  const cartaB = tablero.cartas[indiceB];
-  if (cartaA.idFoto === cartaB.idFoto) {
+  const cartaA = tablero.cards[indiceA];
+  const cartaB = tablero.cards[indiceB];
+  if (cartaA.idPhoto === cartaB.idPhoto) {
     return true;
   } else {
     return false;
@@ -60,41 +59,41 @@ export const checkIfPair = (
 };
 
 export const pairFound = (
-  tablero: Tablero,
+  tablero: Board,
   indiceA: number,
   indiceB: number
 ): void => {
-  const cartaA = tablero.cartas[indiceA];
-  const cartaB = tablero.cartas[indiceB];
-  cartaA.encontrada = true;
-  cartaA.estaVuelta = true;
-  cartaB.encontrada = true;
-  cartaB.estaVuelta = true;
-  tablero.estadoPartida = "CeroCartasLevantadas";
-  tablero.indiceCartaVolteadaA = undefined;
-  tablero.indiceCartaVolteadaB = undefined;
+  const cartaA = tablero.cards[indiceA];
+  const cartaB = tablero.cards[indiceB];
+  cartaA.found = true;
+  cartaA.flipped = true;
+  cartaB.found = true;
+  cartaB.flipped = true;
+  tablero.gameStatus = "zeroCardsFlipped";
+  tablero.flippedCardAIndex = undefined;
+  tablero.flippedCardBIndex = undefined;
 };
 
 export const pairNotFound = (
-  tablero: Tablero,
+  tablero: Board,
   indiceA: number,
   indiceB: number
 ) => {
-  const cartaA = tablero.cartas[indiceA];
-  const cartaB = tablero.cartas[indiceB];
-  cartaA.encontrada = false;
-  cartaA.estaVuelta = false;
-  cartaB.encontrada = false;
-  cartaB.estaVuelta = false;
-  tablero.estadoPartida = "CeroCartasLevantadas";
-  tablero.indiceCartaVolteadaA = undefined;
-  tablero.indiceCartaVolteadaB = undefined;
+  const cartaA = tablero.cards[indiceA];
+  const cartaB = tablero.cards[indiceB];
+  cartaA.found = false;
+  cartaA.flipped = false;
+  cartaB.found = false;
+  cartaB.flipped = false;
+  tablero.gameStatus = "zeroCardsFlipped";
+  tablero.flippedCardAIndex = undefined;
+  tablero.flippedCardBIndex = undefined;
 };
 
-export const isGameComplete = (tablero: Tablero): boolean => {
+export const isGameComplete = (tablero: Board): boolean => {
   if (
-    tablero.cartas.every((carta) => {
-      return carta.estaVuelta === true && carta.encontrada === true;
+    tablero.cards.every((card) => {
+      return card.flipped === true && card.found === true;
     })
   ) {
     return true;

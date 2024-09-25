@@ -1,91 +1,89 @@
-export interface Carta {
-  idFoto: number; 
-  imagen: string; 
-  estaVuelta: boolean;
-  encontrada: boolean;
+export interface Card {
+  idPhoto: number;
+  image: string;
+  flipped: boolean;
+  found: boolean;
 }
 
-interface InfoCarta {
-  idFoto: number;
-  imagen: string;
+interface InfoCard {
+  idPhoto: number;
+  image: string;
 }
 
-export const infoCartas: InfoCarta[] = [
+export const infoCartas: InfoCard[] = [
   {
-    idFoto: 1,
-    imagen:
+    idPhoto: 1,
+    image:
       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/memo/1.png",
   },
 
   {
-    idFoto: 2,
-    imagen:
+    idPhoto: 2,
+    image:
       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/memo/2.png",
   },
 
   {
-    idFoto: 3,
-    imagen:
+    idPhoto: 3,
+    image:
       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/memo/3.png",
   },
 
   {
-    idFoto: 4,
-    imagen:
+    idPhoto: 4,
+    image:
       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/memo/4.png",
   },
 
   {
-    idFoto: 5,
-    imagen:
+    idPhoto: 5,
+    image:
       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/memo/5.png",
   },
 
   {
-    idFoto: 6,
-    imagen:
+    idPhoto: 6,
+    image:
       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/memo/6.png",
   },
 ];
 
-export const crearCartaInicial = (idFoto: number, imagen: string): Carta => ({
-  idFoto,
-  imagen,
-  estaVuelta: false,
-  encontrada: false,
+export const createStartingCard = (idPhoto: number, imagen: string): Card => ({
+  idPhoto: idPhoto,
+  image: imagen,
+  flipped: false,
+  found: false,
 });
 
-type EstadoPartida =
-  | "PartidaNoIniciada"
-  | "CeroCartasLevantadas"
-  | "UnaCartaLevantada"
-  | "DosCartasLevantadas"
-  | "PartidaCompleta";
+type GameStatus =
+  | "gameNotStarted"
+  | "zeroCardsFlipped"
+  | "oneCardFlipped"
+  | "twoCardsFlipped"
+  | "GameComplete";
 
-export interface Tablero {
-  cartas: Carta[];
-  estadoPartida: EstadoPartida;
-  indiceCartaVolteadaA?: number;
-  indiceCartaVolteadaB?: number;
+export interface Board {
+  cards: Card[];
+  gameStatus: GameStatus;
+  flippedCardAIndex?: number;
+  flippedCardBIndex?: number;
 }
 
-
-
-const duplicarCartas = (infoCartas: InfoCarta[]): Carta[] => {
-  const nuevasCartas: Carta[] = infoCartas.map((carta) => ({
-    idFoto: carta.idFoto,
-    imagen: carta.imagen,
-    encontrada: false,
-    estaVuelta: false
+const doubleCards = (infoCartas: InfoCard[]): Card[] => {
+  const newCards: Card[] = infoCartas.map((card) => ({
+    idPhoto: card.idPhoto,
+    image: card.image,
+    found: false,
+    flipped: false,
   }));
-  return [...nuevasCartas, ...nuevasCartas];
+  return [...newCards, ...newCards];
 };
 
-export let cartas: Carta[] = duplicarCartas(infoCartas);
+export let cartas: Card[] = doubleCards(infoCartas);
 
-const crearTableroInicial = (): Tablero => ({
-  cartas: cartas,
-  estadoPartida: "PartidaNoIniciada",
+const createStartBoard = (): Board => ({
+  cards: cartas,
+  gameStatus: "gameNotStarted",
 });
 
-export let tablero: Tablero = crearTableroInicial();
+export let tablero: Board = createStartBoard();
